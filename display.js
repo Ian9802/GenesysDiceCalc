@@ -26,7 +26,9 @@ function getCount(map){
 	for(var i = 0; i < mapValues.length; i++){
 		count += mapValues[i];
 	}
-	console.log(count);
+	var faceCount = document.getElementById('faceCount');
+	faceCount.innerHTML = count;
+	return count;
 }
 
 function mapToDataMap(map){
@@ -129,8 +131,33 @@ function drawVisualizationOfDataGrid(data) {
 		square.style.border = "1px solid rgba(0, 0, 0, 0.8)";
 		new vis.Graph3d(square, data.get(mapKeys[i]), options);
 	}
-
-
-
     // graph3d = new vis.Graph3d(container, data, options);
+}
+
+function generate(){
+	var boost = document.getElementById('Boost');
+	var ability = document.getElementById('Ability');
+	var proficiency = document.getElementById('Proficiency');
+	var setback = document.getElementById('Setback');
+	var difficulty = document.getElementById('Difficulty');
+	var challenge = document.getElementById('Challenge');
+
+	var dicePool = [];
+	addDice(dicePool, Die.createBoost, boost.value);
+	addDice(dicePool, Die.createAbility, ability.value);
+	addDice(dicePool, Die.createProficiency, proficiency.value);
+	addDice(dicePool, Die.createSetback, setback.value);
+	addDice(dicePool, Die.createDifficulty, difficulty.value);
+	addDice(dicePool, Die.createChallenge, challenge.value);
+
+	var results = getAllResults(dicePool);
+	var reduced = toMap(results);
+	var dataMap = mapToDataMap(reduced);
+	drawVisualizationOfDataGrid(dataMap);
+}
+
+function addDice(pool, func, count){
+	for(var i = 0; i < count; i++){
+		pool.push(func());
+	}
 }
